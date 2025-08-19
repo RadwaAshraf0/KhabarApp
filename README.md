@@ -1,16 +1,27 @@
-# news_app
+# 📰 Khabar+ App
 
-A new Flutter project.
+Khabar App is a simple and fast Flutter news application that brings you the latest headlines from around the world.  
+You can browse top news, search for stories, and explore categories in a clean and modern UI.  
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## ✨ Features
+- 📰 Browse the latest headlines.  
+- 🔍 Search for any news easily.  
+- 🌍 Choose news by country & category.  
+- ⚡ Smooth and fast experience with real-time updates.  
+- 📱 Clean and user-friendly design.  
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🚀 Getting Started
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Prerequisites
+- Install [Flutter](https://docs.flutter.dev/get-started/install) SDK.  
+- Install [Dart](https://dart.dev/get-dart).  
+- Android Studio / VS Code with Flutter extension.  
+
+### Installation
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/your-username/Khabar-App.git
