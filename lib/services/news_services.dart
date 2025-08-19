@@ -8,23 +8,17 @@ class NewsService {
   Future<List<ArticlesModel>> getNews(
     String? selectedFlag,
     String? category,
-    String? searchQuery,
   ) async {
     try {
       final localeParam = (selectedFlag != null && selectedFlag.isNotEmpty)
           ? "&locale=$selectedFlag"
           : "";
-
       final categoryParam = (category != null && category.isNotEmpty)
           ? "&categories=$category"
           : "&categories=general";
 
-      final searchParam = (searchQuery != null && searchQuery.isNotEmpty)
-          ? "&search=$searchQuery"
-          : "";
-
       final url =
-          "https://api.thenewsapi.com/v1/news/all?api_token=ifuMCDc88I8L9bzpCN9MVoGbvR6RpjatTUtJo7e6&language=en$localeParam$categoryParam$searchParam";
+          "https://api.thenewsapi.com/v1/news/top?api_token=YuZWn7lbbI87klKxxIN6GCNci9cEi5ObubrDXI7i&language=en&$localeParam$categoryParam";
 
       Response response = await dio.get(url);
       Map<String, dynamic> jsonData = response.data;

@@ -1,7 +1,5 @@
-import 'package:dio/dio.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:news_app/models/articals_model.dart';
-import 'package:news_app/services/news_services.dart';
 import 'package:news_app/widgets/news_listview_builder.dart';
 import 'package:news_app/widgets/search_widget.dart';
 
@@ -15,38 +13,22 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   TextEditingController controller = TextEditingController();
   String searchQuery = "";
-  List<ArticlesModel> articles = [];
-  bool isLoading = false;
+  Timer? _debounce;
 
-  void _onSearchChanged(String value) async {
-    setState(() {
-      searchQuery = value;
-      isLoading = true;
-    });
+  void _onSearchChanged(String value) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
 
-    if (value.isEmpty) {
+    _debounce = Timer(const Duration(milliseconds: 500), () {
       setState(() {
-        articles = [];
-        isLoading = false;
+        searchQuery = value;
       });
-      return;
-    }
-
-    final results = await NewsService(Dio()).getNews(
-      null, // flag
-      "", // category
-      value, // search query
-    );
-
-    setState(() {
-      articles = results;
-      isLoading = false;
     });
   }
 
   @override
   void dispose() {
     controller.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
@@ -59,25 +41,15 @@ class _SearchPageState extends State<SearchPage> {
             SliverToBoxAdapter(
               child: Column(
                 children: [
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: Icon(Icons.arrow_back_ios_new, color: Colors.red),
-                      ),
-                      SizedBox(width: 100),
-                      Text(
-                        "Search",
-                        style: const TextStyle(
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'PlayfairDisplay',
-                          color: Color(0xfff50b09),
-                        ),
-                      ),
-                    ],
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Search",
+                    style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'PlayfairDisplay',
+                      color: Color(0xfff50b09),
+                    ),
                   ),
                   const SizedBox(height: 5),
                   const Center(
@@ -104,26 +76,11 @@ class _SearchPageState extends State<SearchPage> {
                 hasScrollBody: false,
                 child: Center(child: Image.asset("assets/images/empty.png")),
               )
-            else if (isLoading)
-              const SliverFillRemaining(
-                hasScrollBody: false,
-                child: Center(child: CircularProgressIndicator()),
-              )
-            else if (articles.isEmpty)
-              const SliverFillRemaining(
-                hasScrollBody: false,
-                child: Center(
-                  child: Text(
-                    "No results found",
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ),
-              )
             else
               NewsListViewBuilder(
-                selectedFlag: 'General',
-                selectedCategory: 'general',
                 searchQuery: searchQuery,
+                selectedFlag: '',
+                selectedCategory: '',
               ),
           ],
         ),

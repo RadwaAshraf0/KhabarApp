@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:news_app/constants/flags_map.dart';
 import 'package:news_app/models/articals_model.dart';
 import 'package:news_app/services/news_services.dart';
+import 'package:news_app/services/search_service.dart';
 import 'package:news_app/widgets/empty_state.dart';
 import 'package:news_app/widgets/news_listview.dart';
 
@@ -10,22 +11,30 @@ class NewsListViewBuilder extends StatelessWidget {
   const NewsListViewBuilder({
     super.key,
     required this.selectedFlag,
-    required this.selectedCategory, required this.searchQuery,
+    required this.selectedCategory,
+    this.searchQuery,
   });
 
   final String selectedFlag;
   final String selectedCategory;
-  final String searchQuery;
+  final String? searchQuery;
 
-  Future<List<ArticlesModel>> _fetchArticles(String flag, String category) async {
-    final countryCode = flagsMap[flag];
-    return await NewsService(Dio()).getNews(countryCode, category, searchQuery);
+  Future<List<ArticlesModel>> _fetchArticles(
+      String flag, String category, String? query) async {
+    if (query != null && query.isNotEmpty) {
+      // ✅ لو فيه searchQuery استخدم SearchService
+      return await SearchService(Dio()).searchNews(query);
+    } else {
+      // ✅ لو مفيش searchQuery استخدم NewsService
+      final countryCode = flagsMap[flag];
+      return await NewsService(Dio()).getNews(countryCode, category);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ArticlesModel>>(
-      future: _fetchArticles(selectedFlag, selectedCategory),
+      future: _fetchArticles(selectedFlag, selectedCategory, searchQuery),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const SliverToBoxAdapter(

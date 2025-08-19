@@ -58,7 +58,7 @@ class CategoryPage extends StatelessWidget {
 
           NewsListViewBuilder(
             selectedFlag: selectedFlag,
-            selectedCategory: category, searchQuery: searchQuery,
+            selectedCategory: category,
           ),
         ],
       ),

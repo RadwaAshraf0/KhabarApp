@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  NewsListViewBuilder(selectedFlag: selectedFlag!, selectedCategory: category!, searchQuery: searchQuery!),
+                  NewsListViewBuilder(selectedFlag: selectedFlag!, selectedCategory: category!, ),
                 ],
               ),
       ),
